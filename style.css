@@ -128,6 +128,43 @@ img {
   letter-spacing: 0.02em;
 }
 
+.status-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px 0;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 74px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.status-open {
+  background: rgba(11, 159, 90, 0.12);
+  color: var(--primary-dark);
+}
+
+.status-closed {
+  background: rgba(217, 73, 95, 0.12);
+  color: var(--danger);
+}
+
+.hours-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
 main {
   padding: 18px 14px 0;
 }
@@ -253,6 +290,21 @@ main {
 .menu-grid {
   display: grid;
   gap: 14px;
+}
+
+.order-actions {
+  margin-top: 18px;
+}
+
+.clear-order-btn {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid rgba(217, 73, 95, 0.15);
+  background: rgba(217, 73, 95, 0.08);
+  color: var(--danger);
+  border-radius: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
 }
 
 .food-card {
@@ -485,7 +537,9 @@ main {
 
 .primary-action,
 .secondary-btn,
-.nav-btn {
+.nav-btn,
+.menu-order-indicator,
+.clear-order-btn {
   border: none;
   border-radius: 14px;
   transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
@@ -507,7 +561,9 @@ main {
 
 .primary-action:hover,
 .secondary-btn:hover,
-.nav-btn:hover {
+.nav-btn:hover,
+.menu-order-indicator:hover,
+.clear-order-btn:hover {
   transform: translateY(-1px);
 }
 
@@ -821,6 +877,20 @@ main {
   }
 }
 
+@media (min-width: 768px) {
+  .app-shell {
+    width: min(100%, 540px);
+  }
+
+  .menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .promo-banner {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+}
+
 @media (max-width: 360px) {
   .promo-banner {
     grid-template-columns: 1fr;
@@ -832,5 +902,14 @@ main {
 
   .section-header h2 {
     font-size: 1.45rem;
+  }
+
+  .menu-summary {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .menu-total-pill {
+    width: 100%;
   }
 }

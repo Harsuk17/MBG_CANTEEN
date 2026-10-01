@@ -38,7 +38,7 @@ const menuItems = [
     name: "Cutlet (3 pcs)",
     price: 30,
     image:
-      "https://images.unsplash.com/photo-1562967916-eb82221dfb92?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
     description: "Crispy golden cutlets served hot and perfectly spiced."
   },
   {
@@ -78,7 +78,7 @@ const menuItems = [
     name: "Poha",
     price: 15,
     image:
-      "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1604908556858-5d7674d3825e?auto=format&fit=crop&w=900&q=80",
     description: "Light and savory flattened rice, tempered with spices and lemon."
   },
   {
@@ -226,7 +226,39 @@ function showToast(message) {
   clearTimeout(showToast.timeoutId);
   showToast.timeoutId = setTimeout(() => {
     toast.classList.remove("show");
-  }, 1800);
+  }, 2200);
+}
+
+function isOrderingOpen(now = new Date()) {
+  const minutes = now.getHours() * 60 + now.getMinutes();
+  return minutes >= 11 * 60 && minutes < 18 * 60;
+}
+
+function updateOrderingStatus() {
+  const badge = document.getElementById("orderingStatusBadge");
+  const hoursLabel = document.getElementById("workingHoursLabel");
+  const isOpen = isOrderingOpen();
+
+  if (badge) {
+    badge.textContent = isOpen ? "OPEN" : "CLOSED";
+    badge.classList.toggle("status-open", isOpen);
+    badge.classList.toggle("status-closed", !isOpen);
+  }
+
+  if (hoursLabel) {
+    hoursLabel.textContent = isOpen
+      ? "Ordering is open now: 11:00 AM to 6:00 PM"
+      : "Ordering hours: 11:00 AM to 6:00 PM";
+  }
+}
+
+function enforceOrderingHours() {
+  if (isOrderingOpen()) {
+    return true;
+  }
+
+  showToast("Canteen ordering is currently closed. Ordering hours are 11:00 AM to 6:00 PM.");
+  return false;
 }
 
 function hidePreview() {
@@ -531,6 +563,10 @@ function showOrderPreview() {
 }
 
 function openWhatsApp() {
+  if (!enforceOrderingHours()) {
+    return;
+  }
+
   const whatsappUrl = `https://wa.me/${CANTEEN_WHATSAPP_NUMBER}?text=${encodeURIComponent(generateWhatsAppMessage())}`;
   const previewOverlay = document.getElementById("previewOverlay");
 
@@ -545,25 +581,33 @@ function openWhatsApp() {
 function clearCartAndReset() {
   state.cart = {};
   state.menuSelections = {};
-  saveCartState();
+  safeLocalStorageRemove(STORAGE_KEYS.cart);
   renderMenu();
   renderCart();
+  showToast("Order cleared successfully.");
+}
 
-  const customerName = document.getElementById("customerName");
-  const department = document.getElementById("department");
+function clearCurrentOrder() {
+  const hasItems = getSelectedItems().length > 0;
 
-  if (customerName) {
-    customerName.value = "";
-    safeLocalStorageRemove(STORAGE_KEYS.customerName);
+  if (!hasItems) {
+    showToast("Your order is already empty.");
+    return;
   }
 
-  if (department) {
-    department.value = "";
-    safeLocalStorageRemove(STORAGE_KEYS.department);
+  const confirmed = window.confirm("Are you sure you want to clear your current order?");
+  if (!confirmed) {
+    return;
   }
+
+  clearCartAndReset();
 }
 
 function handlePlaceOrder() {
+  if (!enforceOrderingHours()) {
+    return;
+  }
+
   if (!validateCustomerDetails()) {
     return;
   }
@@ -599,6 +643,7 @@ function bindEvents() {
   document.getElementById("customerName").addEventListener("input", saveCustomerData);
   document.getElementById("department").addEventListener("change", saveCustomerData);
 
+  document.getElementById("clearOrderBtn").addEventListener("click", clearCurrentOrder);
   document.getElementById("placeOrderBtn").addEventListener("click", handlePlaceOrder);
   document.getElementById("openWhatsAppBtn").addEventListener("click", openWhatsApp);
   document.getElementById("backToOrderBtn").addEventListener("click", () => {
@@ -629,6 +674,7 @@ function bindEvents() {
 
 document.addEventListener("DOMContentLoaded", () => {
   loadPersistentData();
+  updateOrderingStatus();
   renderMenu();
   renderCart();
   bindEvents();

@@ -31,6 +31,11 @@
 
       <div class="header-tagline">Good Food • Happy People • Better Days</div>
 
+      <div class="status-strip">
+        <span id="orderingStatusBadge" class="status-badge status-open">OPEN</span>
+        <span id="workingHoursLabel" class="hours-label">Ordering hours: 11:00 AM to 6:00 PM</span>
+      </div>
+
       <main>
         <section id="menuScreen" class="screen active" aria-label="Menu screen">
           <div class="promo-banner" aria-label="Fresh food banner">
@@ -96,8 +101,13 @@
                 <option value="Broadcast">Broadcast</option>
                 <option value="Dashboard Creation">Dashboard Creation</option>
                 <option value="Delivery Team">Delivery Team</option>
+                <option value="Webinar Department">Webinar Department</option>
               </select>
             </div>
+          </div>
+
+          <div class="order-actions">
+            <button id="clearOrderBtn" class="clear-order-btn" type="button">CLEAR ORDER</button>
           </div>
 
           <button id="placeOrderBtn" class="primary-action" type="button">
