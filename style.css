@@ -1751,4 +1751,30 @@ main {
     font-size: 1.45rem;
   }
 }
+
+.app-header {
+  background: #123b2b;
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.brand-copy h1 {
+  color: #fff;
+  font-weight: 800;
+}
+
+.brand-copy p {
+  color: #d1e6d8;
+  font-weight: 700;
+}
+
+.brand-icon {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.hamburger {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
 >>>>>>> fea3aefae9b7bffd67d7a793bce7cea5d46f0f4b
